@@ -1,0 +1,6 @@
+{
+  "applicationName": "RealWorldApp.Client",
+  "environment": "Development",
+  "server.urls": "http://+:4200",
+  "webroot": "dist"
+}
