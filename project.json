@@ -63,8 +63,14 @@
     ]
   },
   "scripts": {
-    "postcompile": "ng build",
-    "prepublish": "ng build -prod",
+    "postrestore": [
+      "npm install"
+    ],
+    "postcompile": "node ./node_modules/angular-cli/bin/ng build",
+    "prepublish": [
+      "npm install",
+      "node ./node_modules/angular-cli/bin/ng build -prod"
+    ],
     "postpublish": [
       "dotnet publish-iis --publish-folder %publish:OutputPath% --framework %publish:FullTargetFramework%"
     ]
