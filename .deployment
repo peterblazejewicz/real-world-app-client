@@ -19,6 +19,9 @@ echo Updating NPM
   call npm install -g npm --silent
   IF !ERRORLEVEL! NEQ 0 goto error
 
+echo Installing  angular-cli
+  call npm install -g angular-cli --silent
+  IF !ERRORLEVEL! NEQ 0 goto error
 :: Setup
 :: -----
 
