@@ -14,13 +14,26 @@ IF %ERRORLEVEL% NEQ 0 (
   echo Missing node.js executable, please install node.js, if already installed make sure it can be reached from current environment.
   goto error
 )
-:: Update NPM Version
-echo Updating NPM
-  call npm install -g npm --silent
-  IF !ERRORLEVEL! NEQ 0 goto error
 
-echo Installing  angular-cli
-  call npm install angular-cli -g --silent
+:: Update NPM To Version 3
+ECHO Update NPM version
+IF NOT DEFINED NPM_UPDATED (
+  call npm install -g npm
+  IF !ERRORLEVEL! NEQ 0 goto error
+  SET NPM_UPDATED=true
+)
+
+:: NPM install angular-cli
+ECHO Install angular-cli
+IF NOT DEFINED NG_INSTALLED (
+  call npm install -g angular-cli
+  IF !ERRORLEVEL! NEQ 0 goto error
+  SET NG_INSTALLED=true
+}
+
+echo Installing  NPM dependencies
+  call npm install --production
+  call npm install @types/marked
   IF !ERRORLEVEL! NEQ 0 goto error
 
 :: Setup
@@ -81,6 +94,9 @@ IF !ERRORLEVEL! NEQ 0 goto error
 :: 2. Build and publish
 call :ExecuteCmd dotnet publish "D:\home\site\repository" --output "%DEPLOYMENT_TEMP%" --configuration Release
 IF !ERRORLEVEL! NEQ 0 goto error
+
+:: 2.1 fix NG Assets
+call xcopy /S "%DEPLOYMENT_SOURCE%\src\favicon.ico" "%DEPLOYMENT_TEMP%\wwwroot\dist\favicon.ico"
 
 :: 3. KuduSync
 call :ExecuteCmd "%KUDU_SYNC_CMD%" -v 50 -f "%DEPLOYMENT_TEMP%" -t "%DEPLOYMENT_TARGET%" -n "%NEXT_MANIFEST_PATH%" -p "%PREVIOUS_MANIFEST_PATH%" -i ".git;.hg;.deployment;deploy.cmd"
