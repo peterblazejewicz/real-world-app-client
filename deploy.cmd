@@ -48,26 +48,6 @@ IF NOT DEFINED KUDU_SYNC_CMD (
   SET KUDU_SYNC_CMD=%appdata%\npm\kuduSync.cmd
 )
 
-IF NOT DEFINED NPM_UPDATED (
-  :: Update NPM
-  pushd "%DEPLOYMENT_SOURCE%\site\repository"
-  echo updating NPM
-  call npm update npm -g --silent
-  IF !ERRORLEVEL! NEQ 0 goto error
-  SET NPM_UPDATED=true
-  popd
-)
-
-IF NOT DEFINED NG_INSTALLED (
-  :: Install angular-cli
-  pushd "%DEPLOYMENT_SOURCE%\site\repository"
-  echo installing angular-cli
-  call npm install angular-cli -g --silent
-  IF !ERRORLEVEL! NEQ 0 goto error
-  SET NG_INSTALLED=true
-  popd
-)
-
 IF NOT DEFINED DEPLOYMENT_TEMP (
   SET DEPLOYMENT_TEMP=%temp%\___deployTemp%random%
   SET CLEAN_LOCAL_DEPLOYMENT_TEMP=true
