@@ -66,11 +66,6 @@
     ]
   },
   "scripts": {
-    "prepublish": [
-      "npm install --production",
-      "npm install @types/marked",
-      "ng build -prod "
-    ],
     "postpublish": [
       "dotnet publish-iis --publish-folder %publish:OutputPath% --framework %publish:FullTargetFramework%"
     ]

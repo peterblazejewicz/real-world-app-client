@@ -15,27 +15,6 @@ IF %ERRORLEVEL% NEQ 0 (
   goto error
 )
 
-:: Update NPM To Version 3
-ECHO Update NPM version
-IF NOT DEFINED NPM_UPDATED (
-  call npm install -g npm
-  IF !ERRORLEVEL! NEQ 0 goto error
-  SET NPM_UPDATED=true
-)
-
-:: NPM install angular-cli
-ECHO Install angular-cli
-IF NOT DEFINED NG_INSTALLED (
-  call npm install -g angular-cli
-  IF !ERRORLEVEL! NEQ 0 goto error
-  SET NG_INSTALLED=true
-}
-
-echo Installing  NPM dependencies
-  call npm install --production
-  call npm install @types/marked
-  IF !ERRORLEVEL! NEQ 0 goto error
-
 :: Setup
 :: -----
 
@@ -68,6 +47,27 @@ IF NOT DEFINED KUDU_SYNC_CMD (
   :: Locally just running "kuduSync" would also work
   SET KUDU_SYNC_CMD=%appdata%\npm\kuduSync.cmd
 )
+
+IF NOT DEFINED NPM_UPDATED (
+  :: Update NPM
+  pushd "%DEPLOYMENT_SOURCE%\site\repository"
+  echo updating NPM
+  call npm update npm -g --silent
+  IF !ERRORLEVEL! NEQ 0 goto error
+  SET NPM_UPDATED=true
+  popd
+)
+
+IF NOT DEFINED NG_INSTALLED (
+  :: Install angular-cli
+  pushd "%DEPLOYMENT_SOURCE%\site\repository"
+  echo installing angular-cli
+  call npm install angular-cli -g --silent
+  IF !ERRORLEVEL! NEQ 0 goto error
+  SET NG_INSTALLED=true
+  popd
+)
+
 IF NOT DEFINED DEPLOYMENT_TEMP (
   SET DEPLOYMENT_TEMP=%temp%\___deployTemp%random%
   SET CLEAN_LOCAL_DEPLOYMENT_TEMP=true
@@ -78,12 +78,30 @@ IF DEFINED CLEAN_LOCAL_DEPLOYMENT_TEMP (
   mkdir "%DEPLOYMENT_TEMP%"
 )
 
-IF DEFINED MSBUILD_PATH goto MsbuildPathDefined
-SET MSBUILD_PATH=%ProgramFiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe
-:MsbuildPathDefined
+IF DEFINED MSBUILD_PATH {
+  SET MSBUILD_PATH=%ProgramFiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe
+}
+
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: Deployment
 :: ----------
+
+echo Updating NPM modules
+
+pushd "%DEPLOYMENT_SOURCE%\site\repository"
+call npm install @types/marked --silent
+IF !ERRORLEVEL! NEQ 0 goto error
+popd
+
+pushd "%DEPLOYMENT_SOURCE%\site\repository"
+call npm install @types/marked --silent
+IF !ERRORLEVEL! NEQ 0 goto error
+popd
+
+pushd "%DEPLOYMENT_SOURCE%\site\repository"
+call ng build --prod --silent
+IF !ERRORLEVEL! NEQ 0 goto error
+popd
 
 echo Handling ASP.NET Core Web Application deployment.
 
@@ -96,7 +114,7 @@ call :ExecuteCmd dotnet publish "D:\home\site\repository" --output "%DEPLOYMENT_
 IF !ERRORLEVEL! NEQ 0 goto error
 
 :: 2.1 fix NG Assets
-call xcopy /S "%DEPLOYMENT_SOURCE%\src\favicon.ico" "%DEPLOYMENT_TEMP%\wwwroot\dist\favicon.ico"
+call COPY /Y "%DEPLOYMENT_SOURCE%\site\repository\src\favicon.ico" "%DEPLOYMENT_TEMP%\dist\favicon.ico"
 
 :: 3. KuduSync
 call :ExecuteCmd "%KUDU_SYNC_CMD%" -v 50 -f "%DEPLOYMENT_TEMP%" -t "%DEPLOYMENT_TARGET%" -n "%NEXT_MANIFEST_PATH%" -p "%PREVIOUS_MANIFEST_PATH%" -i ".git;.hg;.deployment;deploy.cmd"
