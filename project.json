@@ -49,13 +49,16 @@
   },
   "publishOptions": {
     "exclude": [
+      ".vscode",
       "**/*.cs",
-      "bin/",
-      "obj/",
-      "e2e/",
-      "src/",
-      "angular-cli.json",
       "*.conf.js",
+      "angular-cli.json",
+      "bin/",
+      "e2e/",
+      "node_modules",
+      "obj/",
+      "protractor.conf.js",
+      "src/",
       "tslint.json"
     ],
     "include": [
@@ -63,11 +66,10 @@
     ]
   },
   "scripts": {
-    "postrestore": [
-      "npm install"
-    ],
     "prepublish": [
-      "ng build -prod"
+      "npm install --production",
+      "npm install @types/marked",
+      "ng build -prod "
     ],
     "postpublish": [
       "dotnet publish-iis --publish-folder %publish:OutputPath% --framework %publish:FullTargetFramework%"
