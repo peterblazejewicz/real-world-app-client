@@ -74,6 +74,11 @@ IF !ERRORLEVEL! NEQ 0 goto error
 popd
 
 pushd "%DEPLOYMENT_SOURCE%\site\repository"
+call npm install @types/node --silent
+IF !ERRORLEVEL! NEQ 0 goto error
+popd
+
+pushd "%DEPLOYMENT_SOURCE%\site\repository"
 call npm install @types/marked --silent
 IF !ERRORLEVEL! NEQ 0 goto error
 popd
