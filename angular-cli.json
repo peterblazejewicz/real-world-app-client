@@ -1,7 +1,7 @@
 {
   "project": {
-    "version": "1.0.0-beta.15",
-    "name": "ang2-conduit"
+    "version": "1.0.0-beta.17",
+    "name": "real-world-app-client"
   },
   "apps": [
     {
