@@ -69,7 +69,7 @@ IF DEFINED MSBUILD_PATH {
 echo Updating NPM modules
 
 pushd "%DEPLOYMENT_SOURCE%\site\repository"
-call npm install @types/marked --silent
+call npm install --production --silent
 IF !ERRORLEVEL! NEQ 0 goto error
 popd
 
