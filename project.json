@@ -34,11 +34,11 @@
       "exclude": [
         "**/node_modules",
         ".vscode",
+        "bin/",
         "dist/",
         "e2e/",
-        "src/",
-        "bin/",
-        "obj/"
+        "obj/",
+        "src/"
       ]
     }
   },
@@ -49,9 +49,12 @@
   },
   "publishOptions": {
     "exclude": [
-      ".vscode",
       "**/*.cs",
       "*.conf.js",
+      ".editorconfig",
+      ".gitignore",
+      ".vscode",
+      "LICENSE",
       "angular-cli.json",
       "bin/",
       "e2e/",
