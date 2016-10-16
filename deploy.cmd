@@ -57,10 +57,6 @@ IF DEFINED CLEAN_LOCAL_DEPLOYMENT_TEMP (
   mkdir "%DEPLOYMENT_TEMP%"
 )
 
-IF DEFINED MSBUILD_PATH (
-  SET MSBUILD_PATH=%ProgramFiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe
-)
-
 IF NOT DEFINED NG_CMD (
   :: Install angular-cli
   echo Installing angular-cli
@@ -68,6 +64,10 @@ IF NOT DEFINED NG_CMD (
   IF !ERRORLEVEL! NEQ 0 goto error
   SET NG_CMD=%appdata%\npm\ng.cmd
 )
+
+IF DEFINED MSBUILD_PATH goto MsbuildPathDefined
+SET MSBUILD_PATH=%ProgramFiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe
+:MsbuildPathDefined
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: Deployment
