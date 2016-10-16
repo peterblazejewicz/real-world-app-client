@@ -15,6 +15,13 @@ IF %ERRORLEVEL% NEQ 0 (
   goto error
 )
 
+:: Verify angular-cli extension has been installed
+IF NOT DEFINED NG_CLI_PATH (
+  echo Missing angular-cli executable, please install it with
+  private angular-cli extension.
+  goto error
+)
+
 :: Setup
 :: -----
 
@@ -55,14 +62,6 @@ IF NOT DEFINED DEPLOYMENT_TEMP (
 IF DEFINED CLEAN_LOCAL_DEPLOYMENT_TEMP (
   IF EXIST "%DEPLOYMENT_TEMP%" rd /s /q "%DEPLOYMENT_TEMP%"
   mkdir "%DEPLOYMENT_TEMP%"
-)
-
-IF NOT DEFINED NG_CMD (
-  :: Install angular-cli
-  echo Installing angular-cli
-  call npm install angular-cli -g --production --silent
-  IF !ERRORLEVEL! NEQ 0 goto error
-  SET NG_CMD=%appdata%\npm\ng.cmd
 )
 
 IF DEFINED MSBUILD_PATH goto MsbuildPathDefined
