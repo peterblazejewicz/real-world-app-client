@@ -43,7 +43,6 @@ IF NOT DEFINED KUDU_SYNC_CMD (
   echo Installing Kudu Sync
   call npm install kudusync -g --silent
   IF !ERRORLEVEL! NEQ 0 goto error
-
   :: Locally just running "kuduSync" would also work
   SET KUDU_SYNC_CMD=%appdata%\npm\kuduSync.cmd
 )
@@ -58,9 +57,17 @@ IF DEFINED CLEAN_LOCAL_DEPLOYMENT_TEMP (
   mkdir "%DEPLOYMENT_TEMP%"
 )
 
-IF DEFINED MSBUILD_PATH {
+IF DEFINED MSBUILD_PATH (
   SET MSBUILD_PATH=%ProgramFiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe
-}
+)
+
+IF NOT DEFINED NG_CMD (
+  :: Install angular-cli
+  echo Installing angular-cli
+  call npm install angular-cli -g --silent
+  IF !ERRORLEVEL! NEQ 0 goto error
+  SET NG_CMD=%appdata%\npm\ng.cmd
+)
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: Deployment
@@ -74,7 +81,7 @@ IF !ERRORLEVEL! NEQ 0 goto error
 popd
 
 pushd "%DEPLOYMENT_SOURCE%\site\repository"
-call npm install @types/node --silent
+call npm install @types/node --production --silent
 IF !ERRORLEVEL! NEQ 0 goto error
 popd
 
@@ -84,7 +91,7 @@ IF !ERRORLEVEL! NEQ 0 goto error
 popd
 
 pushd "%DEPLOYMENT_SOURCE%\site\repository"
-call ng build --prod --silent
+call :ExecuteCmd "%NG_CMD%" build --prod --silent
 IF !ERRORLEVEL! NEQ 0 goto error
 popd
 

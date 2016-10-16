@@ -1,2 +1,4 @@
 [config]
 command = deploy.cmd
+WEBSITE_NODE_DEFAULT_VERSION=6.7.0
+WEBSITE_NPM_DEFAULT_VERSION=3.10.3
