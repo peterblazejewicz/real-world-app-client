@@ -60,7 +60,7 @@ IF DEFINED CLEAN_LOCAL_DEPLOYMENT_TEMP (
 IF NOT DEFINED NG_CMD (
   :: Install angular-cli
   echo Installing angular-cli
-  call npm install angular-cli -g --silent
+  call npm install angular-cli -g --production --silent
   IF !ERRORLEVEL! NEQ 0 goto error
   SET NG_CMD=%appdata%\npm\ng.cmd
 )
