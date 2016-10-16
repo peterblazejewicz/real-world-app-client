@@ -90,7 +90,7 @@ IF !ERRORLEVEL! NEQ 0 goto error
 popd
 
 pushd "%DEPLOYMENT_SOURCE%\site\repository"
-call :ExecuteCmd "%NG_CMD%" build --prod --silent
+call :ExecuteCmd "%NG_CLI_PATH%" build --prod --silent
 IF !ERRORLEVEL! NEQ 0 goto error
 popd
 
