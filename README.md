@@ -45,6 +45,11 @@ This could be somehow simplified and changed in the future when (and if) I add `
 
 This website has been published to Azure: [https://real-world-app-client.azurewebsites.net/](https://real-world-app-client.azurewebsites.net/) and it uses GitHub automation feature. The custom `.deployment` configuration points to `Deploy.cmd` which is used by Kudu service when deploying this Dotnet application.
 
+See: 
+
+- [Customizing deployments](https://github.com/projectkudu/kudu/wiki/Customizing-deployments)
+- [.deployment file](https://github.com/projectkudu/kudu/wiki/Customizing-deployments#deployment-file)
+
 The custom steps added to default ASP.NET Core web application deployment script:
 
 - install production only `NPM` packages for client application: `call npm install --production --silent`
