@@ -17,42 +17,44 @@ This project shows how to integrate Dotnet Core web application built with Angul
 This web app is deployed using Azure [Web Application](Web Apps overview
 ) container from [App Service Platform](https://azure.microsoft.com/en-us/services/app-service/) solution.
 
-The deployment process does not care about:
 
-- `NPM` version installed on machine (it can be older one then you expect)
-- if `angular-cli` (`ng`) tool is installed
-
-If `anguar-cli` is not installed on web application host machine the deploy process will fail because of `ng` command line tool missing on the host.
-
-Before you start deployement log into your web application Kudu service tools page:
+Before you start deployement log into your web application Kudu service tools page to verify it has a NodeJS and NPM installed:
 
 - [Exploring the Super Secret Kudu Debug Console - with David Ebbo](https://azure.microsoft.com/en-us/documentation/videos/super-secret-kudu-debug-console-for-azure-web-sites/)
 - [Windows Azure Websites online tools you should know about](https://azure.microsoft.com/en-us/blog/windows-azure-websites-online-tools-you-should-know-about/)
 
-and both update `NPM` and install `angular-cli` tool using CMD console tools:
+### NodeJS and NPM version
 
-```bash
-D:\Home> npm install -g npm
+Set your website NodeJS version:
+
+```.ini
+WEBSITE_NODE_DEFAULT_VERSION = 6.7.0
 ```
 
-```bash
-D:\Home> npm install -g angular-cli
-```
+This will setup NodeJS to 6.7.0 and NPM to 3.10.3
 
-This could be somehow simplified and changed in the future when (and if) I add `angular-cli` web site extension for Azure web sites.
+### Enable Private Extensions
+
+Set your web application to support private extension [OPT]:
+
+```.ini
+WEBSITE_PRIVATE_EXTENSIONS = 1
+```
 
 ### Deployment
 
 This website has been published to Azure: [https://real-world-app-client.azurewebsites.net/](https://real-world-app-client.azurewebsites.net/) and it uses GitHub automation feature. The custom `.deployment` configuration points to `Deploy.cmd` which is used by Kudu service when deploying this Dotnet application.
 
-See: 
+See:
 
 - [Customizing deployments](https://github.com/projectkudu/kudu/wiki/Customizing-deployments)
 - [.deployment file](https://github.com/projectkudu/kudu/wiki/Customizing-deployments#deployment-file)
 
 The custom steps added to default ASP.NET Core web application deployment script:
 
+- install `angular-cli` command line tool: `call npm install ng --production --silent`
 - install production only `NPM` packages for client application: `call npm install --production --silent`
+- install single NPM package required by TypeScript build phase when `ng` tool is producing output: `call npm install @types/node --silent`
 - install single NPM package required by TypeScript build phase when `ng` tool is producing output: `call npm install @types/marked --silent`
 - run `angular-cli` build with production settings: `call ng build --prod --silent`
 
