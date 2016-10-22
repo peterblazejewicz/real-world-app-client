@@ -80,7 +80,7 @@ IF !ERRORLEVEL! NEQ 0 goto error
 popd
 
 pushd "%DEPLOYMENT_SOURCE%\site\repository"
-call npm install @types/node --production --silent
+call npm install @types/node --silent
 IF !ERRORLEVEL! NEQ 0 goto error
 popd
 
@@ -90,7 +90,7 @@ IF !ERRORLEVEL! NEQ 0 goto error
 popd
 
 pushd "%DEPLOYMENT_SOURCE%\site\repository"
-call :ExecuteCmd "%NG_CLI_PATH%" build --prod --silent
+call :ExecuteCmd "%NG_CLI_PATH%" build --silent
 IF !ERRORLEVEL! NEQ 0 goto error
 popd
 
