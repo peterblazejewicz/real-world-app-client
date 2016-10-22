@@ -41,7 +41,17 @@ Set your web application to support private extension [OPT]:
 WEBSITE_PRIVATE_EXTENSIONS = 1
 ```
 
+### Install private extension for `angular-cli`
+
+Add `angular-cli` tool into your web site toolchain:
+
+[angular-cli extension](https://github.com/peterblazejewicz/azure-site-extensions/tree/master/NgCliExtension)
+
+(while installing be patient - even if `--production` option is used it takes time)
+
 ### Deployment
+
+Once you have updated your web site Node/NPM settings and installed `angular-cli` in toolchain using private extension you are ready to implement continous deployment to Azure using local or remote Git repository.
 
 This website has been published to Azure: [https://real-world-app.azurewebsites.net/](https://real-world-app.azurewebsites.net/) and it uses GitHub automation feature. The custom `.deployment` configuration points to `Deploy.cmd` which is used by Kudu service when deploying this Dotnet application.
 
@@ -52,7 +62,6 @@ See:
 
 The custom steps added to default ASP.NET Core web application deployment script:
 
-- install `angular-cli` command line tool: `call npm install ng --production --silent`
 - install production only `NPM` packages for client application: `call npm install --production --silent`
 - install single NPM package required by TypeScript build phase when `ng` tool is producing output: `call npm install @types/node --silent`
 - install single NPM package required by TypeScript build phase when `ng` tool is producing output: `call npm install @types/marked --silent`
