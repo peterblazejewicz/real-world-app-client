@@ -43,7 +43,7 @@ WEBSITE_PRIVATE_EXTENSIONS = 1
 
 ### Deployment
 
-This website has been published to Azure: [https://real-world-app-client.azurewebsites.net/](https://real-world-app-client.azurewebsites.net/) and it uses GitHub automation feature. The custom `.deployment` configuration points to `Deploy.cmd` which is used by Kudu service when deploying this Dotnet application.
+This website has been published to Azure: [https://real-world-app.azurewebsites.net/](https://real-world-app.azurewebsites.net/) and it uses GitHub automation feature. The custom `.deployment` configuration points to `Deploy.cmd` which is used by Kudu service when deploying this Dotnet application.
 
 See:
 
