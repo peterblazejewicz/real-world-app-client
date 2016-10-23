@@ -87,16 +87,6 @@ IF !ERRORLEVEL! NEQ 0 goto error
 popd
 
 pushd "%DEPLOYMENT_SOURCE%\site\repository"
-call yarn add @types/node
-IF !ERRORLEVEL! NEQ 0 goto error
-popd
-
-pushd "%DEPLOYMENT_SOURCE%\site\repository"
-call yarn add @types/marked
-IF !ERRORLEVEL! NEQ 0 goto error
-popd
-
-pushd "%DEPLOYMENT_SOURCE%\site\repository"
 call ng build --silent
 IF !ERRORLEVEL! NEQ 0 goto error
 popd
