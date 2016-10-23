@@ -16,9 +16,16 @@ IF %ERRORLEVEL% NEQ 0 (
 )
 
 :: Verify angular-cli extension has been installed
-IF NOT DEFINED NG_CLI_PATH (
-  echo Missing angular-cli executable, please install it with
-  private angular-cli extension.
+which ng 2>nul >nul
+IF %ERRORLEVEL% NEQ 0 (
+  echo Missing angular-cli executable, please install it with private angular-cli extension.
+  goto error
+)
+
+:: Verify yarn extension has been installed
+which yarn 2>nul >nul
+IF %ERRORLEVEL% NEQ 0 (
+  echo Missing Yarn, please install it with private Yarn extension.
   goto error
 )
 
@@ -75,22 +82,22 @@ SET MSBUILD_PATH=%ProgramFiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe
 echo Updating NPM modules
 
 pushd "%DEPLOYMENT_SOURCE%\site\repository"
-call npm install --production --silent
+call yarn install --production
 IF !ERRORLEVEL! NEQ 0 goto error
 popd
 
 pushd "%DEPLOYMENT_SOURCE%\site\repository"
-call npm install @types/node --silent
+call yarn add @types/node
 IF !ERRORLEVEL! NEQ 0 goto error
 popd
 
 pushd "%DEPLOYMENT_SOURCE%\site\repository"
-call npm install @types/marked --silent
+call yarn add @types/marked
 IF !ERRORLEVEL! NEQ 0 goto error
 popd
 
 pushd "%DEPLOYMENT_SOURCE%\site\repository"
-call :ExecuteCmd "%NG_CLI_PATH%" build --silent
+call ng build --silent
 IF !ERRORLEVEL! NEQ 0 goto error
 popd
 
